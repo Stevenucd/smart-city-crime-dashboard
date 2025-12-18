@@ -1,0 +1,42 @@
+### OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+### Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage/
+*.egg-info/
+.python-version
+instance/
+
+### Env / venv
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+### Node / frontend build
+node_modules/
+dist/
+.vite/
+.cache/
+.eslintcache
+
+### ML (data & artifacts)
+ml/data/*
+!ml/data/.gitkeep
+ml/artifacts/
+
+### Logs / local DB
+*.sqlite
+*.db
+*.log
