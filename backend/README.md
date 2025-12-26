@@ -16,9 +16,9 @@ source .venv/bin/activate
 pip install -r backend/requirements.txt
 ```
 
-2) 配置环境变量（可选）
+2) 配置环境变量
 
-复制 `backend/.env.example` 为 `backend/.env`，按需修改。
+复制 `backend/.env.example` 为 `backend/.env`，按需修改（`DATABASE_URL` 必填）。
 
 3) 启动
 
@@ -29,3 +29,4 @@ python backend/run.py
 启动后访问：
 
 - `GET http://127.0.0.1:5000/api/health`
+- `GET http://127.0.0.1:5000/api/incidents/count?from=2024-01-01&to=2024-02-01`
