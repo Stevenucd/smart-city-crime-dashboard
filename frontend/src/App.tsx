@@ -324,7 +324,7 @@ function App() {
 
     const range = computeRange()
     if (!range) {
-      setError('请选择有效的起止日期')
+      setError('Please select a valid start and end date')
       setLoading(false)
       return
     }
@@ -347,6 +347,15 @@ function App() {
       }
       const countData = await countResponse.json()
       setTotalCount(countData.count ?? 0)
+
+      // If count exceeds cap, surface banner and skip fetching records to avoid heavy renders.
+      if ((countData.count ?? 0) > MAX_RESULTS) {
+        setIncidents([])
+        setMix([])
+        setSelectedIncident(null)
+        setLoading(false)
+        return
+      }
 
       const incidentParams = new URLSearchParams(baseParams)
       incidentParams.set('limit', MAX_RESULTS.toString())
@@ -408,8 +417,8 @@ function App() {
       <header className="topbar card">
         <div>
           <p className="eyebrow">Los Angeles Crime</p>
-          <h1>Two views: Map & Forecasts</h1>
-          <p className="muted">Tap markers for incident details, or switch to the forecast view.</p>
+          <h1>Smart City Crime Dashboard</h1>
+          <p className="muted">Tap markers for incident details, or switch to the prediction view.</p>
         </div>
         <div className="tabs">
           <button
@@ -424,29 +433,28 @@ function App() {
             className={`tab ${view === 'predict' ? 'tab--active' : ''}`}
             onClick={() => setView('predict')}
           >
-            Forecast
+            Prediction
           </button>
         </div>
       </header>
 
       {view === 'map' && (
         <>
-          {overLimit && (
-            <div className="alert alert--warn">
-              当前结果 {totalCount} 条，超过 1000 条，仅显示前 1000 条，请缩小时间范围或增加筛选
-            </div>
-          )}
           {error && (
             <div className="alert alert--error">
               {error}
             </div>
           )}
           <section className={`card map-card ${isFullscreen ? 'map-shell--full' : ''}`}>
+            {overLimit && (
+              <div className="alert alert--warn">
+                {`Current result ${totalCount} exceeds 1000. Markers are hidden; narrow the time range or add filters.`}
+              </div>
+            )}
             <div className="panel__header">
               <div>
                 <p className="eyebrow">LA incident map</p>
                 <h3>Click markers to inspect</h3>
-                <p className="muted">Live incidents pulled from PostgreSQL via Flask API.</p>
               </div>
               <div className="controls">
                 <button
@@ -476,21 +484,19 @@ function App() {
                 {timeframe === 'Custom range' && (
                   <>
                     <label className="control">
-                      From (YYYY-MM-DD 或 YYYY.MM.DD)
+                      From
                       <input
-                        type="text"
+                        type="date"
                         value={fromDate}
                         onChange={(e) => setFromDate(e.target.value)}
-                        placeholder="2024-02-03"
                       />
                     </label>
                     <label className="control">
-                      To (YYYY-MM-DD 或 YYYY.MM.DD)
+                      To
                       <input
-                        type="text"
+                        type="date"
                         value={toDate}
                         onChange={(e) => setToDate(e.target.value)}
-                        placeholder="2024-03-03"
                       />
                     </label>
                   </>
@@ -547,7 +553,7 @@ function App() {
             <div className="legend">
               <div>
                 <p className="muted">Dataset</p>
-                <p>PostgreSQL · incidents table</p>
+                <p>Crime Data from 2020 to Present Los Angeles</p>
               </div>
               <div>
                 <p className="muted">Time window</p>
@@ -648,7 +654,7 @@ function App() {
             ))}
           </div>
           <div className="trend-card mini-trend">
-            <p className="muted">月度走势（示例）</p>
+            <p className="muted">Monthly trend (sample)</p>
             <div className="trend">
               <svg viewBox="0 0 320 120" role="img" aria-label="Monthly trend">
                 <defs>
