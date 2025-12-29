@@ -26,3 +26,6 @@ class Config:
         self.DEBUG = _parse_bool(os.getenv("FLASK_DEBUG"), default=(self.ENV == "development"))
         self.PORT = int(os.getenv("PORT", "5000"))
         self.CORS_ORIGINS = _parse_origins(os.getenv("CORS_ORIGINS"))
+        self.DATABASE_URL = os.getenv("DATABASE_URL")
+        if not self.DATABASE_URL:
+            raise RuntimeError("DATABASE_URL environment variable is required")
