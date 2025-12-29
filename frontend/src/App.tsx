@@ -417,7 +417,7 @@ function App() {
       <header className="topbar card">
         <div>
           <p className="eyebrow">Los Angeles Crime</p>
-          <h1>Smart City Crime Dashboard</h1>
+          <h1 className="text-4xl font-black tracking-tight">Smart City Crime Dashboard</h1>
           <p className="muted">Tap markers for incident details, or switch to the prediction view.</p>
         </div>
         <div className="tabs">
@@ -454,7 +454,7 @@ function App() {
             <div className="panel__header">
               <div>
                 <p className="eyebrow">LA incident map</p>
-                <h3>Click markers to inspect</h3>
+                <h3 className="text-xl font-bold">Click markers to inspect</h3>
               </div>
               <div className="controls">
                 <button
@@ -518,6 +518,7 @@ function App() {
               <MapContainer
                 center={laCenter}
                 zoom={11}
+                maxZoom={20}
                 scrollWheelZoom
                 className="map__leaflet"
                 ref={(instance) => {
@@ -533,8 +534,10 @@ function App() {
                 }}
               >
                 <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                  subdomains={['a', 'b', 'c', 'd']}
+                  maxZoom={20}
                 />
                 <MapBoundsTracker onBoundsChange={handleBoundsChange} />
                 {incidents.map((spot) => (
