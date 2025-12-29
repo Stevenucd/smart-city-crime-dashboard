@@ -373,7 +373,7 @@ function App() {
       setMix(buildMix(mapped))
       setSelectedIncident((current) => {
         if (current) {
-          const found = mapped.find((item) => item.id === current.id)
+          const found = mapped.find((item: { id: string }) => item.id === current.id)
           if (found) return found
         }
         return mapped[0] ?? null
